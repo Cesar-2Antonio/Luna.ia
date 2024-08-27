@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+       button {
+            font-size: 18px; /* Tamaño del icono */
+            width: 40px; /* Ancho del botón */
+            height: 40px; /* Alto del botón (debe ser igual al ancho para hacerlo circular) */
+            padding: 0; /* Sin padding para mantener la forma circular */
+            border: none;
+            background-color: #585c58; /* Color de fondo verde */
+            color: white;
+            cursor: pointer;
+            border-radius: 50%; /* Bordes redondeados al 50% para hacerlo circular */
+            display: flex; /* Usar flexbox para centrar el contenido */
+            align-items: center; /* Centrar verticalmente */
+            justify-content: center; /* Centrar horizontalmente */
+            font-family: Arial, sans-serif; /* Fuente opcional para mejor apariencia */
+        }
+
+        button:hover {
+            background-color: #45a049; /* Color de fondo al pasar el ratón */
+        }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #1E90FF, #FFFFFF);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: rotate(-15deg);
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .main-logo-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 300px;
+      /* Ajusta la altura según sea necesario */
+      margin: 0 auto;
+    }
+
+    .main-logo {
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #1E90FF, #FFFFFF);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: rotate(-15deg);
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .logo img,
+    .main-logo img {
+      width: 70%;
+      height: 70%;
+      border-radius: 50%;
+    }
+
+    @keyframes float {
+      0% {
+        transform: rotate(-15deg) translateY(0);
+      }
+
+      50% {
+        transform: rotate(-15deg) translateY(-10px);
+      }
+
+      100% {
+        transform: rotate(-15deg) translateY(0);
+      }
+    }
+
+    .chat-container {
+      width: 100%;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      height: 60vh;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #fff;
+      margin: 0 auto;
+    }
+
+    .chat-header {
+      background-image: url('luna.gif');
+      /* URL del GIF */
+      background-size: cover;
+      /* Asegura que el GIF cubra todo el área del encabezado */
+      background-position: center;
+      /* Centra el GIF en el encabezado */
+      color: #fff;
+      /* Color del texto del encabezado */
+      padding: 16px;
+      text-align: center;
+      font-size: 18px;
+      /* Tamaño del texto del encabezado */
+      font-weight: bold;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      border-bottom: 1px solid #ddd;
+      background-color: #f9f9f9;
+    }
+
+    .message {
+      margin-bottom: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      max-width: 80%;
+      clear: both;
+    }
+
+    .message.bot {
+      background-color: #e1e1e1;
+      align-self: flex-start;
+    }
+
+    .message.user {
+      background-color: #007bff;
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    .chat-footer {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+      background-color: #fff;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    #message-input {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      margin-right: 10px;
+    }
+
+    #send-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    #send-button:hover {
+      background-color: #0056b3;
+    }
+
+    .icon-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .icon-buttons button {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .icon-buttons button img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .text-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .text-section h2 {
+      font-size: 30px;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #007bff;
+    }
+
+    .text-section p {
+      font-size: 18px;
+      color: #666;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .about-section {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20px;
+      max-width: 100%;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .about-section p {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .chat-container {
+        height: 50vh;
+      }
+
+      .logo {
+        width: 60px;
+        height: 60px;
+      }
+
+      .logo img,
+      .main-logo img {
+        width: 60%;
+        height: 60%;
+      }
+
+      .main-logo {
+        width: 120px;
+        height: 120px;
+      }
+
+      .text-section h2 {
+        font-size: 24px;
+      }
+
+      .text-section p {
+        font-size: 16px;
+      }
+
+      .section-title {
+        font-size: 20px;
+      }
+
+      .about-section p {
+        font-size: 14px;
+      }
+      
+    }
+
+    @media (max-width: 480px) {
+      .chat-container {
+        height: 40vh;
+      }
+
+      .logo {
+        width: 50px;
+        height: 50px;
+      }
+
+      .logo img,
+      .main-logo img {
+        width: 50%;
+        height: 50%;
+      }
+
+      .main-logo {
+        width: 100px;
+        height: 100px;
+      }
+
+      .text-section h2 {
+        font-size: 20px;
+      }
+
+      .text-section p {
+        font-size: 14px;
+      }
+
+      .section-title {
+        font-size: 18px;
+      }
+      
+      .typing-indicator {   
+        font-style: italic;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+      .about-section p {
+        font-size: 12px;
+      }
+
+      .message {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user {
+            background-color: #d1e7dd;
+            align-self: flex-end;
+        }
+        .bot {
+            background-color: #f8d7da;
+            align-self: flex-start;
+        }
+        .typing-indicator {
+            font-style: italic;
+            color: #888;
+            margin-bottom: 10px;
+        }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="chat-header">
+    <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+      <div class="flex items-center">
+        <div class="logo">
+          <img src="logo.jpg" alt="Logo">
+        </div>
+        <h1 class="text-3xl font-bold ml-4">LUNA</h1>
+      </div>
+      <nav class="mt-4 sm:mt-0">
+        <div class="flex flex-wrap justify-center sm:justify-end space-x-2">
+          <a href="#about-section" class="nav-link">Nosotros</a>
+          <a href="#objective-section" class="nav-link">Objetivo</a>
+          <a href="#vision-section" class="nav-link">I.A.</a>
+          <a href="#areas-section" class="nav-link">Estudio de Áreas</a>
+          <a href="#emergency-mx-section" class="nav-link">Líneas de Emergencia <br /> México</a>
+          <a href="#emergency-co-section" class="nav-link">Líneas de Emergencia <br />Colombia</a>
+          <a href="#contact-section" class="nav-link">Contacto</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container mx-auto px-4 py-8">
+    <div class="flex flex-col md:flex-row items-center justify-center">
+      <div class="w-full md:w-1/2 p-4 text-center">
+        <div class="main-logo-container">
+          <div class="main-logo" data-aos="fade-up">
+            <img src="logo.jpg" alt="Logo">
+          </div>
+        </div>
+        <h2 class="text-4xl font-bold mt-4" data-aos="fade-up" data-aos-delay="100">LUNA</h2>
+        <p class="text-lg mt-2" data-aos="fade-up" data-aos-delay="200">¿No encuentras con quien hablar sobre cómo te sientes?</p>
+        <p class="mt-2" data-aos="fade-up" data-aos-delay="300">LUNA es un asistente virtual impulsado por la Inteligencia Artificial para brindarte el apoyo emocional que necesitas.</p>
+      </div>
+      <div class="w-full md:w-1/2 p-4">
+        <div class="chat-container" data-aos="fade-left">
+          <div class="chat-header">Chatea con LUNA</div>
+          <div class="chat-box" id="chat-box">
+            <!-- Mensajes del chat -->
+          </div>
+          <footer class="chat-footer">
+            <input type="text" id="message-input" placeholder="Comienza la conversacion con un Hola...">
+            <button id="send-button">🛫</button>
+          </footer>
+          <div class="icon-buttons">
+            <button id="llamar"> 📞  </button>
+
+            <button id="Icon"> 📴 </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section id="about-section" class="about-section">
+      <h2 class="section-title">Sobre Nosotros</h2>
+      <p>Soy una asistente virtual impulsada por Inteligencia Artificial, creada para acompañarte en tus momentos más difíciles. Estoy aquí para ofrecerte apoyo emocional y herramientas que te ayudarán a mejorar tu bienestar.
+
+        La depresión y la ansiedad son trastornos que afectan a millones de personas en todo el mundo. En México, las cifras son alarmantes, y en Colombia, muchas personas también enfrentan estos desafíos emocionales diariamente.
+        No estás solo, siempre podrás contar con alguien. Permíteme ser tu acompañante en este camino hacia una mejor salud emocional.
+      </p>
+    </section>
+    <section id="objective-section" class="about-section">
+      <h2 class="section-title">Objetivo</h2>
+      <p>Proponer una aplicación de inteligencia artificial que funcione como un chatbot para detectar señales de depresión y ansiedad en los usuarios y canalizarlos de manera rápida a los recursos de atención adecuados, garantizando un entorno seguro y confiable para la interacción del usuario y la protección de sus datos.
+      </p>
+    </section>
+    <section id="vision-section" class="about-section">
+      <h2 class="section-title">I.A.</h2>
+      <p>La IA en chatbots puede detectar depresión o ansiedad analizando patrones en el lenguaje y el tono de los usuarios. Utiliza algoritmos para identificar palabras clave y señales emocionales, permitiendo al chatbot ofrecer apoyo apropiado, sugerir recursos de ayuda y alertar a profesionales si es necesario.</p>
+    </section>
+    <section id="areas-section" class="about-section">
+      <h2 class="section-title">Estudio de Áreas</h2>
+      <p>Realizamos estudios para identificar las áreas más afectadas por la depresión y la ansiedad, y así dirigir nuestros esfuerzos de manera más efectiva.</p>
+    </section>
+    <section id="emergency-mx-section" class="about-section">
+      <h2 class="section-title">Líneas de Emergencia México</h2>
+      <p>Si te encuentras en México y necesitas ayuda, Comunicate: Chat de Confianza y línea de seguridad al +52 55 5533 5533</p>
+    </section>
+    <section id="emergency-co-section" class="about-section">
+      <h2 class="section-title">Líneas de Emergencia Colombia</h2>
+      <p>Si te encuentras en Colombia y necesitas ayuda, Comunicate: El poder de ser escuchado: +57 30 0754 8933</p>
+    </section>
+    <section id="contact-section" class="about-section">
+      <h2 class="section-title">Contacto</h2>
+      <p>Puedes ponerte en contacto con nosotros a través de: delfinequipo@gmail.com </p>
+    </section>
+  </div>
+
+  <script>
+    // Función para manejar el botón de llamada
+    document.getElementById('llamar').addEventListener('click', function () {
+      let country = prompt("¿Eres de México o Colombia?").toLowerCase();
+      if (country === 'colombia') {
+        window.location.href = 'tel:3007548933';
+      } else if (country === 'méxico') {
+        window.location.href = 'tel:+525555335533';
+      } else {
+        alert("Por favor, ingresa 'México' o 'Colombia'.");
+      }
+    });
+
+    // Función para manejar el botón de enlace
+    document.getElementById('Icon').addEventListener('click', function () {
+      window.location.href = 'https://www.youtube.com/watch?v=w3LixVBTE1U&ab_channel=Desansiedad';
+    });
+  </script>
+
+<body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const chatBox = document.getElementById('chat-box');
+
+            let userName = '';
+            let chatState = 'intro'; // Estado inicial de la conversación
+            let responses = []; // Almacenar respuestas del usuario
+            let currentQuestionSet = []; // Almacenar el conjunto de preguntas actuales
+            let questionIndex = 0; // Índice de la pregunta actual
+
+            const frasesBuenDia = [
+                "mi día estuvo genial","bien", "estuvo muy bien", "me siento feliz", "estuvo tranquilo", 
+                "tuve un buen día", "me agradó mi día", "estuvo super", "me fue muy bien hoy",
+                "todo salió como esperaba", "me sentí excelente", "fue un día perfecto", 
+                "estoy de buen humor", "el día fue muy positivo", "me divertí mucho hoy",
+                "todo salió según lo planeado", "me siento satisfecho con mi día", 
+                "fue un día productivo", "me levanté con buena energía", "todo estuvo bajo control",
+                "fue un día lleno de logros", "me sentí realizado hoy", "todo fue bastante agradable",
+                "fue un día emocionante", "disfruté cada momento", "todo salió a la perfección",
+                "me sentí inspirado hoy", "fue un día lleno de sorpresas agradables", 
+                "estoy contento con lo que logré", "el día fue muy gratificante", 
+                "todo se desarrolló sin problemas", "me siento renovado y optimista",
+                "fue un día lleno de buenas noticias", "me sentí muy positivo todo el día"
+            ];
+
+            const frasesMalDia = [
+                "tuve un mal día", "me siento un poco triste", "no quiero hablar de mi día",
+                "me siento sola", "me fue mal hoy", "me sentí muy triste hoy", "todo salió mal",
+                "tuve un día difícil", "me siento desanimado", "hoy no fue un buen día",
+                "las cosas no salieron como esperaba", "me siento agotado emocionalmente",
+                "no me va bien hoy", "estoy frustrado con mi día", "fue un día muy complicado",
+                "me siento abrumado", "nada salió como planeaba", "me siento decepcionado",
+                "hoy no fue mi día", "me siento desalentado", "todo parece estar en contra",
+                "no logré lo que quería", "me siento cansado y triste", "mi día fue bastante pesado",
+                "estoy luchando con mi estado de ánimo", "todo parece difícil hoy", 
+                "me siento atrapado", "nada salió bien", "me siento insatisfecho",
+                "estoy deseando que termine el día", "me siento poco motivado",
+                "mi día ha sido un reto constante", "me siento deprimido"
+            ];
+
+            const anxietyQuestions = [
+            "¿Te sientes a menudo inquieto o con nerviosismo?",
+            "¿Te resulta difícil relajarte incluso en situaciones en las que no hay peligro?",
+            "¿Cuánto tiempo al día te sientes triste o desmotivado?",
+            "¿Sientes que tienes menos interés en las cosas que solían alegrarte?",
+            "¿Con qué frecuencia te sientes fatigado o sin energía, incluso después de descansar?",
+            "¿Te resulta difícil concentrarte en tareas o tomar decisiones?",
+            "¿Te sientes irritable o enojado con más frecuencia de lo habitual?",
+            "¿Tienes pensamientos negativos sobre ti mismo o sobre tu vida en general?",
+            "¿Experimentas cambios significativos en tu apetito o peso, ya sea aumento o pérdida?",
+            "¿Te cuesta dormir o te despiertas muy temprano y no puedes volver a dormir?"
+          ];
+
+            function showTypingIndicator() {
+              const typingIndicator = document.createElement('div');
+              typingIndicator.classList.add('typing-indicator');
+              typingIndicator.textContent = 'Luna está escribiendo...';
+              chatBox.appendChild(typingIndicator);
+              chatBox.scrollTop = chatBox.scrollHeight;
+          }
+
+          function hideTypingIndicator() {
+              const typingIndicator = document.querySelector('.typing-indicator');
+              if (typingIndicator) {
+                  chatBox.removeChild(typingIndicator);
+              }
+          }
+
+          function addMessage(content, isUser = true, delay = 0) {
+              setTimeout(() => {
+                  const messageDiv = document.createElement('div');
+                  messageDiv.classList.add('message');
+                  messageDiv.classList.add(isUser ? 'user' : 'bot');
+                  messageDiv.textContent = content;
+                  // Usar innerHTML para permitir hipervínculos
+                  messageDiv.innerHTML = content;
+                  chatBox.appendChild(messageDiv);
+                  chatBox.appendChild(messageDiv);
+                  chatBox.scrollTop = chatBox.scrollHeight;
+              }, delay);
+          }
+
+          function askQuestions(questions, callback) {
+            currentQuestionIndex = 0; // Inicializa el índice de preguntas
+            responses = []; // Inicializa las respuestas
+
+            function handleKeyPress(e) {
+                if (e.key === 'Enter') {
+                    const response = messageInput.value.trim();
+                    if (response.match(/^[0-3]$/)) {
+                        responses.push(response);
+                        messageInput.value = ''; // Limpiar el campo de entrada
+
+                        currentQuestionIndex++;
+                        if (currentQuestionIndex < questions.length) {
+                            addMessage(questions[currentQuestionIndex], false, 0);
+                        } else {
+                            // Finalizar el cuestionario
+                            messageInput.removeEventListener('keypress', handleKeyPress); // Remover el event listener
+                            addMessage("Gracias por contestar las preguntas. Estoy analizando tus respuestas...", false, 0);
+                            
+                            // Analizar las respuestas después de 5 segundos
+                            setTimeout(() => {
+                                analyzeResponses(responses);
+                                if (callback) callback(); // Llamar al callback después del análisis si es necesario
+                            }, 5000);
+                        }
+                    } else {
+                        addMessage("Por favor, responde con un número entre 0 y 3.", false, 0);
+                    }
+                }
+            }
+
+            // Mostrar la primera pregunta
+            addMessage(questions[currentQuestionIndex], false, 0);
+            // Añadir el event listener para manejar la entrada del usuario
+            messageInput.addEventListener('keypress', handleKeyPress);
+        }
+
+        function analyzeResponses(responses) {
+            const count2or3 = responses.filter(response => response === '2' || response === '3').length;
+
+                if (count2or3 > 5) {
+            addMessage("Parece que podrías estar experimentando síntomas de depresión. Te sugiero ponerte en contacto con algún profesional para obtener más ayuda y apoyo. En mi página encontrarás una línea de ayuda de México y Colombia a la cual te puedes comunicar. Recuerda que eres una persona valiosa para mí. Te recomendaré leer este artículo para aliviar un poco: <a href='https://hospital.vallhebron.com/es/asistencia/salud-y-bienestar/como-evitar-caer-en-la-ansiedad-y-la-depresion' target='_blank'>Aquí</a>. Luna está 24/7 para ti.", false, 0);
+        } else if (count2or3 > 0) {
+            addMessage("Parece que podrías estar experimentando síntomas de ansiedad. Quiero que sepas que no tienes que pasar por esto solo/a. Estoy aquí para ayudarte en lo que necesites pero lo primeros pasos es hacerte con tu mayor confianza o buscar un especialista de la salud emocional. Aquí te dejo unas recomendaciones: <a href='https://medlineplus.gov/spanish/ency/patientinstructions/000874.htm' target='_blank'>Aquí</a>.", false, 0);
+        } else {
+            addMessage("Estás haciendo un buen trabajo, pero podría ser útil abordar algunos aspectos específicos. Además, si sientes que es necesario, podrías considerar hablar con un profesional. Me despido, pero aquí estaré para ti.", false, 0);
+        }
+}
+
+          function getResponse(message) {
+              const messageLower = message.toLowerCase();
+
+              console.log("Estado actual:", chatState); // Mensaje de depuración
+              console.log("Entrada del usuario:", messageLower); // Mensaje de depuración
+
+              if (chatState === 'intro') {
+                  if (messageLower.includes("hola")) {
+                      chatState = 'askName';
+                      return "Hola, Soy Luna, una asistente virtual guiada por inteligencia artificial, estoy encantada de tu visita. ¿Cuál es tu nombre?";
+                  }
+              } else if (chatState === 'askName') {
+                  userName = message.trim();
+                  chatState = 'askDay';
+                  return `Encantada de conocerte, ${userName}! Oye cuéntame.... ¿Cómo estuvo tu día? \nElige \n1 Excelente \n2 Agotado.`;
+              } else if (chatState === 'askDay') {
+                  if (messageLower === '1') {
+                      chatState = 'askGood';
+                      return "¡Me alegra saber que tuviste un excelente día! Quisiera que me platicaras mas sobre tu día, creo que sonara interesante!";
+                  } else if (messageLower === '2') {
+                      chatState = 'askSupport';
+                      return "Aqui estoy contigo, platicame mas sobre tu dia, estoy aqui para escucharte...";
+                  } else {
+                      return "Por favor, elige una opción válida.";
+                  }
+              } else if (chatState === 'askGood') {
+                  chatState = 'askQuestions';
+                    return "¡Qué bien! Creo que eso fue lo emocionante de tu día. Oye...te hare una serie de preguntas responderas con numeros 0(No)  1(Aveces)  2(casi siempre)  3(si) Escribe 'ok'para continuar.....";
+              } else if ( chatState === 'askSupport') {
+                  chatState = 'askQuestions';
+                  return "Recuerda que eres una gran persona, por favor ten en cuenta tus logros, tus habilidades que te hacen ser especial en ti y no dejes que un mal dia oculte la linda persona que eres... Oye...te hare una serie de preguntas responderas con numeros 0(No)  1(Aveces)  2(casi siempre)  3(si) Escribe 'ok'para continuar.....";
+             
+              } else if (chatState === 'askQuestions') {
+                  if (messageLower === 'ok') {
+                      chatState = 'askAnxietyQuestions';
+                      currentQuestionIndex = 0; // Resetear el índice de preguntas
+                      askQuestions(anxietyQuestions, () => {
+                          chatState = 'askDepressionQuestions';
+                          addMessage("Gracias por responder las preguntas Luna esta a tu disposicion", false, 0);
+                          // Aquí puedes agregar las preguntas sobre depresión si las tienes definidas
+                      }
+                    );
+                  } else if (messageLower === 'no') {
+                      chatState = 'end';
+                      return "Lamento que no quieras responder. Sin embargo, te sugiero que consideres responder las preguntas para que pueda comprenderte mejor.";
+                  } else {
+                      return "Por favor responde con 'ok' o 'no'.";
+                  }
+              } else if (chatState === 'askDepressionQuestions') {
+                  
+                  evaluateResponses(responses, 'depression');
+                  chatState = 'end';
+              } else if (chatState === 'end') {
+                  return "Gracias por tu tiempo. Si necesitas más ayuda, no dudes en buscar apoyo profesional.";
+              }
+          }
+
+
+
+
+            sendButton.addEventListener('click', function () {
+                const userMessage = messageInput.value.trim();
+                if (userMessage) {
+                    addMessage(userMessage, true, 0);
+                    const botResponse = getResponse(userMessage);
+                    showTypingIndicator();
+                    setTimeout(() => {
+                        hideTypingIndicator();
+                        if (botResponse) {
+                            addMessage(botResponse, false, 0);
+                        }
+                        messageInput.value = ''; // Limpiar el campo de entrada después de cada respuesta
+                    }, 500);
+                }
+            });
+
+            messageInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+        });5
+</script>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script>
+    AOS.init();
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
